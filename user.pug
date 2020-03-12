@@ -1,0 +1,81 @@
+doctype html
+html(lang='en')
+	head
+		title Test
+	body
+		h3 TEST API
+	div
+		p= title
+		each val, index in userProfile
+			p= index + ': ' + val
+		br
+		a(href="#" onclick="javascript:window.history.back(-1);return false;") Back to Index Page
+		br 
+		br
+		if isAuthenticated
+			form
+				//-(method='post', action='/add-to-group')
+				//- WHY IS METHOD & ACTION NOT WORKING ??????????
+				input(type="text" id="userEmail" value="User Email")
+				input(type="text" id="groupName" value="Group Name")
+				button(type="button" id="btnAddUserToGroup" name="btnAddUserToGroup") Add User To Group
+			
+			form(name='change-pw')
+				button(type="button" id="btnChangePW" name="btnChangePW") Change Password
+			
+
+	
+	script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+	script.
+		$(document).ready(function() {
+		// on user clicking the submit button
+			var userData = !{JSON.stringify(userProfile)};
+
+			$("#btnChangePW").click(function(e) {
+				e.preventDefault();
+				$.ajax({
+					type: "POST",
+					url: "/change-password",
+					dataType: 'json',
+					data: userData,
+					complete: function(e, xhr, settings) {
+						//- if (e.status === 200) {
+						//- 	console.log ('got code 200');
+						//- 	window.location.href = "/logout";
+						//- }
+						//- else if (e.status === 400) {
+						//- 	alert ('Error logging out. Check email.')
+						//- }
+					},
+					success: function() {
+						//- alert("You\'ve been logged out. We\'ve just sent you an email to reset your password.");
+					}
+				});
+			});
+
+			$("#btnAddUserToGroup").click(function(e) {
+				var postData = {};
+				postData.userEmail = $("#userEmail").val();
+				postData.groupName = $("#groupName").val();
+				console.log(postData);
+
+				//- e.preventDefault();
+				$.ajax({
+					type: "POST",
+					url: "/add-to-group",
+					data: postData
+					//- complete: function(e, xhr, settings) {
+						//- if (e.status === 200) {
+						//- 	console.log ('got code 200');
+						//- 	window.location.href = "/logout";
+						//- }
+						//- else if (e.status === 400) {
+						//- 	alert ('Error logging out. Check email.')
+						//- }
+					//- },
+					//- success: function() {
+						//- alert("You\'ve been logged out. We\'ve just sent you an email to reset your password.");
+					//- }
+				});
+			});
+		});

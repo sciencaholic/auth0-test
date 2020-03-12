@@ -1,0 +1,16 @@
+doctype html
+html(lang='en')
+  head
+    title Test
+  body
+    h2 TEST API
+    h3 Index Page
+    div
+      if isAuthenticated
+        a(href="/user")
+          div Logged in! Go to User Page
+        a(href="/logout")
+          div Logout
+      else
+        a(href="/login")
+          div Log in
